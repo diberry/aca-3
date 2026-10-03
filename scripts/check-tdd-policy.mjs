@@ -62,6 +62,27 @@ export function findTestBypasses(testSources) {
   return findings;
 }
 
+export function findPullRequestExemption(configuration, pullRequestNumber) {
+  if (!configuration || !Array.isArray(configuration.pullRequests)) {
+    throw new TypeError("TDD exemptions must contain a pullRequests array.");
+  }
+
+  for (const exemption of configuration.pullRequests) {
+    if (
+      !Number.isInteger(exemption.number) ||
+      exemption.number <= 0 ||
+      typeof exemption.reason !== "string" ||
+      exemption.reason.trim().length === 0
+    ) {
+      throw new TypeError(
+        "Each TDD exemption must contain a positive pull request number and a nonempty reason.",
+      );
+    }
+  }
+
+  return configuration.pullRequests.find(({ number }) => number === pullRequestNumber);
+}
+
 export function evaluateTddPolicy({
   body,
   changedFiles,
@@ -207,13 +228,23 @@ async function main() {
   const event = await readJson(argumentsByName.get("event"));
   const changedFileRecords = flattenPages(await readJson(argumentsByName.get("files")));
   const commitRecords = flattenPages(await readJson(argumentsByName.get("commits")));
+  const exemptions = await readJson(argumentsByName.get("exemptions"));
   const repository = argumentsByName.get("repository");
   const token = process.env.GITHUB_TOKEN;
   const body = event.pull_request?.body ?? "";
+  const pullRequestNumber = event.pull_request?.number;
   const changedFiles = changedFileRecords.map((file) => file.filename);
 
-  if (!repository || !token) {
-    throw new Error("The repository argument and GITHUB_TOKEN are required.");
+  if (!repository || !token || !Number.isInteger(pullRequestNumber)) {
+    throw new Error("The repository, pull request number, and GITHUB_TOKEN are required.");
+  }
+
+  const exemption = findPullRequestExemption(exemptions, pullRequestNumber);
+  if (exemption) {
+    console.log(
+      `TDD policy: pull request #${pullRequestNumber} is explicitly grandfathered. ${exemption.reason}`,
+    );
+    return;
   }
 
   if (!changedFiles.some(isRuntimePath)) {

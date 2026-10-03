@@ -63,4 +63,5 @@ jobs:
             --event "${GITHUB_EVENT_PATH}" \
             --files "${RUNNER_TEMP}/pr-files.json" \
             --commits "${RUNNER_TEMP}/pr-commits.json" \
+            --exemptions ".github/governance/tdd-exemptions.json" \
             --repository "${GITHUB_REPOSITORY}"

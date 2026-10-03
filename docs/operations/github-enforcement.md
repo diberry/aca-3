@@ -24,6 +24,11 @@ The TDD check requires:
 Documentation and governance pull requests without runtime path changes are exempt from
 red-step evidence. All pull requests remain subject to normal validation.
 
+PR #3 is explicitly grandfathered in `.github/governance/tdd-exemptions.json` because Wave 1
+was implemented before this policy was adopted. Exemptions require a pull request number and
+reason, remain subject to `pr-description` and normal validation, and must be reviewed as
+governance changes. Enforcement applies to all new runtime behavior beginning with Wave 2.
+
 To capture verifiable red-step evidence:
 
 1. Branch from current `origin/main`.

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   evaluateTddPolicy,
   extractMarkdownField,
+  findPullRequestExemption,
   findTestBypasses,
   flattenPages,
 } from "../../scripts/check-tdd-policy.mjs";
@@ -16,6 +17,36 @@ const validBody = `## Test-driven development evidence
 `;
 
 describe("TDD policy enforcement", () => {
+  it("honors an explicit pull request exemption", () => {
+    expect(
+      findPullRequestExemption(
+        {
+          pullRequests: [
+            {
+              number: 3,
+              reason: "Wave 1 predates policy adoption.",
+            },
+          ],
+        },
+        3,
+      ),
+    ).toEqual({
+      number: 3,
+      reason: "Wave 1 predates policy adoption.",
+    });
+  });
+
+  it("rejects malformed pull request exemptions", () => {
+    expect(() =>
+      findPullRequestExemption(
+        {
+          pullRequests: [{ number: 3, reason: "" }],
+        },
+        3,
+      ),
+    ).toThrow("positive pull request number and a nonempty reason");
+  });
+
   it("flattens paginated GitHub API arrays", () => {
     expect(flattenPages([[{ filename: "src/a.ts" }], [{ filename: "tests/a.test.ts" }]])).toEqual([
       { filename: "src/a.ts" },
