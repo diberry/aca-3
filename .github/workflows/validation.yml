@@ -17,7 +17,7 @@ concurrency:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -35,3 +35,8 @@ jobs:
         run: pnpm validate
       - name: Audit production dependencies
         run: pnpm audit --prod --audit-level high
+      - name: Build Stage 0 containers
+        run: |
+          docker build -f src/auth/Containerfile -t aca-auth:stage-0 .
+          docker build -f src/author/Containerfile -t aca-author:stage-0 .
+          docker build -f src/backend/Containerfile -t aca-backend:stage-0 .

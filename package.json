@@ -2,7 +2,7 @@
   "name": "aca-platform",
   "version": "0.0.0",
   "private": true,
-  "description": "ACA platform monorepo foundation",
+  "description": "ACA platform local vertical slice",
   "type": "module",
   "packageManager": "pnpm@12.7.0",
   "engines": {
@@ -10,13 +10,18 @@
     "pnpm": "12.7.0"
   },
   "scripts": {
-    "build": "tsc --project tsconfig.build.json",
+    "build": "tsc --project tsconfig.build.json && vite build --config src/author/vite.config.ts && vite build --config src/auth/vite.config.ts",
+    "build:auth": "vite build --config src/auth/vite.config.ts",
+    "build:author": "vite build --config src/author/vite.config.ts",
+    "build:types": "tsc --project tsconfig.build.json",
+    "dev": "tsc --project tsconfig.build.json && node scripts/dev.mjs",
     "format": "biome format --write .",
     "format:check": "biome format .",
     "lint": "biome lint .",
+    "smoke": "tsc --project tsconfig.build.json && node scripts/smoke-local.mjs",
     "test": "vitest run",
     "typecheck": "tsc --noEmit --project tsconfig.json",
-    "validate": "biome format . && biome lint . && tsc --noEmit --project tsconfig.json && vitest run && tsc --project tsconfig.build.json && node scripts/validate-workflows.mjs",
+    "validate": "biome format . && biome lint . && tsc --noEmit --project tsconfig.json && vitest run && tsc --project tsconfig.build.json && vite build --config src/author/vite.config.ts && vite build --config src/auth/vite.config.ts && node scripts/validate-workflows.mjs && node scripts/smoke-local.mjs",
     "validate:workflows": "node scripts/validate-workflows.mjs"
   },
   "dependencies": {
@@ -29,6 +34,7 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "typescript": "7.0.2",
+    "vite": "8.3.1",
     "vitest": "5.0.2",
     "yaml": "2.9.1"
   }

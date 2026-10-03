@@ -1,8 +1,8 @@
 # ACA platform
 
-This repository contains the Wave 0 monorepo foundation for an Azure Container Apps
-platform. It establishes enforceable architecture, governance, and delivery boundaries
-without implementing Stage 0 application behavior.
+This repository contains the ACA platform foundation and Stage 0 local vertical slice.
+One command starts a public-boundary shell that loads the Author runtime microfrontend and
+calls the Backend through same-origin routes.
 
 ## Architecture
 
@@ -12,10 +12,9 @@ available to browsers only through authenticated and authorized same-origin Auth
 routes. Backend services are internal. Service-to-service calls use managed workload
 identity with distinct Author and Backend audiences.
 
-Local development credentials may be introduced in Stage 0 only behind an explicit
-`LOCAL_DEV_AUTH_ENABLED` gate that must fail closed outside a local environment. Wave 0
-does not create credentials, app registrations, secrets, Azure resources, or runtime
-routes.
+Stage 0 uses a non-secret mock user only behind the explicit `LOCAL_DEV_AUTH_ENABLED` and
+`ACA_ENVIRONMENT=local` gates. The stack refuses to start the mock identity in any other
+environment. No credentials, app registrations, secrets, or Azure resources are created.
 
 See [the trust-boundary diagram](docs/architecture/trust-boundaries.md) and
 [the foundation architecture](docs/architecture/foundation.md).
@@ -52,23 +51,26 @@ dependency are exact-pinned. The lockfile is authoritative for transitive depend
 corepack enable
 corepack prepare pnpm@12.7.0 --activate
 pnpm install --frozen-lockfile
+pnpm dev
 pnpm format:check
 pnpm lint
 pnpm typecheck
 pnpm test
 pnpm build
+pnpm smoke
 pnpm validate:workflows
 pnpm validate
 ```
 
-`pnpm validate` runs the complete Wave 0 repository validation. It does not contain
-success-shaped fallbacks.
+`pnpm validate` runs formatting, linting, type checking, unit and integration tests,
+production builds, workflow validation, and the real local-stack smoke test. It does not
+contain success-shaped fallbacks.
 
 ## Workspace layout
 
-- `src/auth`: future public Auth/Shell boundary.
-- `src/author`: future Author runtime microfrontend boundary.
-- `src/backend`: future internal Backend boundary.
+- `src/auth`: local public Auth/Shell boundary and same-origin proxies.
+- `src/author`: runtime Author microfrontend and manifest.
+- `src/backend`: internal Backend health and hello endpoints.
 - `packages/contracts`: shared versioned boundary contracts.
 - `packages/ui`: shared presentational types and components.
 - `packages/auth-context`: browser-safe authenticated-user context types.
@@ -76,9 +78,14 @@ success-shaped fallbacks.
 - `tests`: integration, end-to-end, deployment, and security validation areas.
 - `docs`: architecture, deployment, operations, provider, and ADR records.
 
-## Wave 0 status
+## Wave status
 
-The repository foundation is implemented. Stage 0 behavior, deployment, identity setup,
-and Azure provisioning remain intentionally unimplemented. Wave 0 exits only after the
-gate in [the foundation architecture](docs/architecture/foundation.md) is satisfied and
-the foundation pull request is approved and merged.
+- **Wave 0:** Complete and merged.
+- **Wave 1 / Stage 0:** Local shell, Author runtime microfrontend, Backend, local auth gate,
+  header hardening, safe fallbacks, container definitions, automated tests, and smoke
+  validation are implemented.
+- **Deferred:** Azure provisioning, real identity providers, managed identities, public
+  deployment, and Stages 1–3.
+
+See [Stage 0 architecture](docs/architecture/stage-0-local.md) and
+[local development operations](docs/operations/local-development.md).
