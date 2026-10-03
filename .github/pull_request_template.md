@@ -1,11 +1,28 @@
-## Summary
+## Goal
 
-Describe the change and the user or platform outcome.
+<!-- Describe the measurable user, platform, or repository outcome. -->
 
 ## Scope
 
-- [ ] The change is limited to the stated stage and does not pull in deferred behavior.
-- [ ] Related ADRs and documentation are updated.
+### Included
+
+<!-- List the work included in this pull request. -->
+
+### Excluded
+
+<!-- List deferred or intentionally excluded work. -->
+
+## Implementation steps
+
+<!-- List the ordered implementation steps completed by this pull request. -->
+
+## Risks and mitigations
+
+<!-- Identify material risks and their mitigations. If none, explain why. -->
+
+## Validation criteria
+
+<!-- List measurable acceptance criteria and the exact commands or checks proving each result. -->
 
 ## Test-driven development evidence
 
@@ -30,16 +47,14 @@ For documentation, governance, or build maintenance with no runtime behavior cha
 Describe changes to public ingress, same-origin routes, identity, audiences, authorization,
 secrets, dependencies, or workflow permissions. Write "None" only after checking each area.
 
-## Validation
-
-List the exact commands and results. Do not use success-shaped fallbacks.
-
 ## Rollback
 
 Describe how to revert the change and any data, identity, or deployment considerations.
 
 ## Review checklist
 
+- [ ] The change is limited to the stated stage and does not pull in deferred behavior.
+- [ ] Related ADRs and documentation are updated.
 - [ ] No secrets, tokens, raw auth headers, or credentials are committed.
 - [ ] The test-driven development workflow in `docs/architecture/wave-plan.md` is satisfied.
 - [ ] New GitHub Actions use immutable commit SHA pins and least privilege.

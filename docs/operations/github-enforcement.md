@@ -1,12 +1,18 @@
 # GitHub TDD enforcement
 
-ACA-3 backs its test-driven development policy with a required pull request check and an
-idempotent repository configuration script.
+ACA-3 backs its pull request and test-driven development policies with required checks and
+an idempotent repository configuration script.
 
 ## Enforcement model
 
-The `TDD Policy` workflow evaluates pull requests that change runtime paths under `src/`,
-`packages/`, or `infra/`. It requires:
+The `Pull Request Policy` workflow runs two independent checks:
+
+- `pr-description` requires nonempty Goal, Scope, Implementation steps, Risks and
+  mitigations, and Validation criteria sections on every pull request.
+- `tdd-policy` evaluates pull requests that change runtime paths under `src/`, `packages/`,
+  or `infra/`.
+
+The TDD check requires:
 
 - a full failing-test commit SHA in the pull request body;
 - a test change in that commit and no production implementation in the same commit;
@@ -53,11 +59,11 @@ does not expose a plan name. They then apply the maximum supported configuration
 4. If neither protection API is available, retain the supported repository settings and
    exit with an explicit partial-enforcement error.
 
-Both protection modes require the `test`, `validate`, and `tdd-policy` checks, require pull
-requests and resolved review threads, block deletion and force pushes, and require linear
-history. The default approval count is zero because the repository has one maintainer. Use
-`-RequiredApprovingReviewCount` or `--review-count` when another eligible reviewer is
-available.
+Both protection modes require the `pr-description`, `test`, `validate`, and `tdd-policy`
+checks, require pull requests and resolved review threads, block deletion and force pushes,
+and require linear history. The default approval count is zero because the repository has
+one maintainer. Use `-RequiredApprovingReviewCount` or `--review-count` when another
+eligible reviewer is available.
 
 Never apply protection before the workflow exists on `main`, because requiring a nonexistent
 check can block all merges.

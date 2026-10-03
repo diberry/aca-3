@@ -148,6 +148,7 @@ cat >"$ruleset_file" <<EOF
       "type": "required_status_checks",
       "parameters": {
         "required_status_checks": [
+          {"context": "pr-description"},
           {"context": "test"},
           {"context": "validate"},
           {"context": "tdd-policy"}
@@ -172,7 +173,7 @@ cat >"$classic_file" <<EOF
 {
   "required_status_checks": {
     "strict": true,
-    "contexts": ["test", "validate", "tdd-policy"]
+    "contexts": ["pr-description", "test", "validate", "tdd-policy"]
   },
   "enforce_admins": true,
   "required_pull_request_reviews": {

@@ -19,5 +19,10 @@ If an assertion changes during implementation, explain why and preserve the inte
 Every pull request must also preserve the accepted architecture decisions, trust boundaries,
 exact dependency pins, immutable GitHub Action pins, and required validation.
 
+Every pull request description must include nonempty Goal, Scope, Implementation steps,
+Risks and mitigations, and Validation criteria sections. Keep these sections synchronized
+with the final diff and validation results. The `pr-description` check enforces the section
+names and requires meaningful content.
+
 See [GitHub TDD enforcement](docs/operations/github-enforcement.md) for automated evidence
 checks and repository configuration.
