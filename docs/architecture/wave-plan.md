@@ -27,6 +27,8 @@ Every behavior change uses this sequence:
      the expected missing or incorrect behavior.
    - Commit the failing test before the implementation. A draft pull request may be red
      during this step; `main` must remain green.
+   - Push the failing-test commit, open a draft pull request, and wait for its `test` check
+     to record the expected failure before adding the implementation commit.
 2. **Green**
    - Add the smallest production change that makes the new test pass.
    - Run the focused test and all directly affected validation.
@@ -69,3 +71,6 @@ A behavior pull request is not merge-ready without:
 - confirmation that the test exercises production code;
 - an explanation for any assertion changed after implementation began;
 - all repository validation and security checks passing.
+
+See [GitHub TDD enforcement](../operations/github-enforcement.md) for the required check and
+repository configuration procedure.

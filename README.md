@@ -28,7 +28,9 @@ behavior. The test commit precedes the implementation commit, and both normally 
 one green pull request after the red-green-refactor cycle is complete.
 
 See the [wave delivery plan and test-driven workflow](docs/architecture/wave-plan.md) and
-[contribution instructions](CONTRIBUTING.md).
+[contribution instructions](CONTRIBUTING.md). The
+[GitHub enforcement guide](docs/operations/github-enforcement.md) documents the required
+policy check and idempotent repository configuration scripts.
 
 ## v1 stages
 
