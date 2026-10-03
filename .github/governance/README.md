@@ -8,7 +8,7 @@ Adopted now:
 - deterministic-first, least-privilege, read-only-by-default agent policy;
 - real ownership and contribution templates;
 - pnpm and GitHub Actions Dependabot configuration;
-- validation and security workflows with immutable Action pins;
+- one validation workflow with immutable Action pins and a production dependency audit;
 - source package manifest and checksum provenance.
 
 Deferred:

@@ -21,7 +21,7 @@ Wave 0 exits only when all of the following are true:
 - All five approved decisions have Accepted ADRs.
 - The pinned Node.js and pnpm toolchain installs from the committed lockfile.
 - Formatting, linting, type checking, tests, build, and workflow validation pass.
-- CODEOWNERS, PR template, issue form, Dependabot, validation, and security workflows are real.
+- CODEOWNERS, PR template, issue form, Dependabot, and the consolidated validation and security audit workflow are real.
 - Every external Action reference uses a full immutable commit SHA.
 - The trust-boundary diagram and same-origin, audience, and local-gate invariants are documented.
 - Modernization automation is absent or disabled until every prerequisite is evidenced.

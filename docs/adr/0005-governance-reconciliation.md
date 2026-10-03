@@ -13,7 +13,8 @@ placeholders, mutable Action tags, and automation whose prerequisites are absent
 
 Use the governance package as the policy baseline and selectively adapt richer repository
 assets. Replace placeholders with `@diberry`, configure pnpm and GitHub Actions Dependabot,
-and implement least-privilege validation and security workflows with immutable Action SHAs.
+and implement one least-privilege validation workflow with immutable Action SHAs and a
+production dependency audit.
 Retain the source package manifest and checksum catalog for provenance. Keep modernization
 agent behavior and policy documentation, but do not add or schedule modernization workflows
 until credentials, `gh-aw`, a compiled lock workflow, billing controls, and manual validation exist.
