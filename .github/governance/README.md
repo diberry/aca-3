@@ -16,6 +16,7 @@ Deferred:
 - modernization inventory schedules;
 - monthly agentic modernization review;
 - any workflow that creates issues or requires model/provider credentials.
+- CodeQL result upload until GitHub code scanning is enabled for the repository.
 
 Those capabilities remain disabled because this repository has no evidenced `gh-aw`
 compiler, generated lock workflow, credential, network review, billing control, or manual
