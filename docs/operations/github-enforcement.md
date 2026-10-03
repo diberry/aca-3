@@ -43,16 +43,24 @@ pwsh ./scripts/configure-github.ps1 -Apply
 bash ./scripts/configure-github.sh --apply
 ```
 
-The scripts create or update the `aca-main-protection` ruleset, require the `test`,
-`validate`, and `tdd-policy` checks, require pull requests and resolved review threads,
-block deletion and force pushes, require linear history, enable squash-only merging, and
-delete merged branches. The default approval count is zero because the repository has one
-maintainer. Use `-RequiredApprovingReviewCount` or `--review-count` when another eligible
-reviewer is available.
+The scripts inspect the repository owner type, visibility, reported account plan, rulesets
+API, and classic branch protection API. Capability probes are authoritative when GitHub
+does not expose a plan name. They then apply the maximum supported configuration:
 
-The apply operation checks ruleset availability before changing any setting. Never activate
-the ruleset before the workflow exists on `main`, because requiring a nonexistent check can
-block all merges.
+1. Always configure squash-only merging and automatic branch deletion.
+2. Prefer the `aca-main-protection` ruleset when rulesets are available.
+3. Fall back to equivalent classic branch protection when that API is available.
+4. If neither protection API is available, retain the supported repository settings and
+   exit with an explicit partial-enforcement error.
+
+Both protection modes require the `test`, `validate`, and `tdd-policy` checks, require pull
+requests and resolved review threads, block deletion and force pushes, and require linear
+history. The default approval count is zero because the repository has one maintainer. Use
+`-RequiredApprovingReviewCount` or `--review-count` when another eligible reviewer is
+available.
+
+Never apply protection before the workflow exists on `main`, because requiring a nonexistent
+check can block all merges.
 
 ## Current plan limitation
 
@@ -64,6 +72,7 @@ Upgrade to GitHub Pro or make this repository public to enable this feature.
 ```
 
 The workflow still reports policy violations on pull requests, but GitHub cannot make that
-check merge-blocking on the current plan. The scripts fail before mutation when this
-capability is unavailable. After GitHub Pro is enabled or the repository becomes public,
-run the dry run again and then apply the ruleset.
+check merge-blocking on the current plan. In apply mode, the scripts can still configure
+squash-only merging and automatic branch deletion, then exit nonzero to report that branch
+protection remains unavailable. After the repository gains either protection capability,
+run the dry run again and apply the strongest detected protection.
