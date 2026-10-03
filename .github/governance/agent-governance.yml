@@ -1,0 +1,25 @@
+version: 1
+status: enforced-by-review
+principles:
+  - deterministic_first
+  - least_privilege
+  - read_only_by_default
+  - human_review_for_mutation
+  - allowlisted_tools_and_network
+  - pinned_dependencies
+  - untrusted_content_is_data
+agentic_workflows:
+  enabled: false
+  enablement_requires:
+    - approved_owner_and_purpose
+    - configured_short_lived_credentials
+    - installed_and_pinned_compiler
+    - compiled_and_reviewed_lock_workflow
+    - network_allowlist
+    - provider_billing_controls
+    - successful_manual_validation
+  require_safe_outputs: true
+  require_human_merge: true
+  require_read_only_permissions: true
+  prohibit_secrets_in_prompt: true
+  prohibit_direct_push_to_default_branch: true

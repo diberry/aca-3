@@ -1,0 +1,43 @@
+name: Feature request
+description: Propose a bounded ACA platform feature or foundation change.
+title: "[Feature]: "
+labels:
+  - "type:feature"
+body:
+  - type: markdown
+    attributes:
+      value: "Do not include secrets, credentials, tokens, or confidential logs."
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Outcome
+      description: What observable user or platform outcome is required?
+    validations:
+      required: true
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Stage
+      options:
+        - "Wave 0 foundation"
+        - "Stage 0"
+        - "Stage 1"
+        - "Stage 2"
+        - "Stage 3"
+        - "Deferred beyond v1"
+    validations:
+      required: true
+  - type: textarea
+    id: boundaries
+    attributes:
+      label: Trust-boundary impact
+      description: Describe ingress, identity, audience, authorization, data, or secret impacts.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance evidence
+      description: List the tests and evidence that will prove completion.
+    validations:
+      required: true

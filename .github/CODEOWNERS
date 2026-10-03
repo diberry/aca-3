@@ -1,0 +1,5 @@
+* @diberry
+/.github/ @diberry
+/docs/adr/ @diberry
+/infra/ @diberry
+/packages/contracts/ @diberry

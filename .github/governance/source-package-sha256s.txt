@@ -1,0 +1,11 @@
+ace99778ad827f823ec3706981cabd4030035c32f405f524aefcbd22884bc6b1  ./.github/agents/repository-modernization.agent.md
+ef95dc2ffef6afd545a7e78666614e2a6704197f2f582c8946c2a4fe7e2e37da  ./.github/governance/agent-governance.yml
+432e9ee3a9d35becd583f999d7301f2354150af19feff2a41bf098c15a5df50f  ./.github/governance/model-and-token-policy.md
+264f478f8dd821f5cf4131624d48c8311954cc3b7653c43a46dd6c5056c1c305  ./.github/governance/repository-modernization-policy.md
+ab0cd8ea77cefc5f2bc2bcc4b47432bfb14ad936c6bd8a7e12e5b6dc4eab7d53  ./.github/workflows/modernization-inventory.yml
+1b57e889bb2d7aafbd506a34969e8ccb427d3a4a737649bfe77c10d975590fcf  ./.github/workflows/monthly-modernization-review.md
+12cdfd867c184218c01571cdc2245e787df320123134161c3cdbec10c31b7e0d  ./MANIFEST.txt
+12d42978cef43bb9a416b7df6ef6c47c7ef284984c37020a018e70378c7159b1  ./README.md
+c4574db599951f21bda406ba025609383493084e9bf35671b43837ff153b37dc  ./docs/platform/AGENT_FIRST_GOVERNANCE.md
+b2fb66a88d9b7a119ea2c4d287d5453ffe66ff8bcfa43a4b3d8ed49e559af3b9  ./docs/platform/MODEL_AND_TOKEN_CONFIGURATION.md
+21ab4fb5f0c55ba0b683f51d7259edb92e7f55aeae26011ae038ba1163a8d1a4  ./scripts/collect-modernization-inventory.sh

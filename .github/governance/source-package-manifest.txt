@@ -1,0 +1,11 @@
+./.github/agents/repository-modernization.agent.md
+./.github/governance/agent-governance.yml
+./.github/governance/model-and-token-policy.md
+./.github/governance/repository-modernization-policy.md
+./.github/workflows/modernization-inventory.yml
+./.github/workflows/monthly-modernization-review.md
+./MANIFEST.txt
+./README.md
+./docs/platform/AGENT_FIRST_GOVERNANCE.md
+./docs/platform/MODEL_AND_TOKEN_CONFIGURATION.md
+./scripts/collect-modernization-inventory.sh
