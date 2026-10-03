@@ -20,6 +20,16 @@ routes.
 See [the trust-boundary diagram](docs/architecture/trust-boundaries.md) and
 [the foundation architecture](docs/architecture/foundation.md).
 
+## Development policy
+
+ACA-3 is an always-green, test-driven development repository. Beginning with Wave 2, every
+runtime behavior or bug fix requires a green test contract pull request to merge into `main`
+before its implementation branch is created. The implementation pull request binds those
+already-merged assertions to production code without weakening them.
+
+See the [wave delivery plan and tests-first merge gate](docs/architecture/wave-plan.md) and
+[contribution instructions](CONTRIBUTING.md).
+
 ## v1 stages
 
 v1 is limited to Stages 0 through 3:
