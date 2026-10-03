@@ -22,12 +22,12 @@ See [the trust-boundary diagram](docs/architecture/trust-boundaries.md) and
 
 ## Development policy
 
-ACA-3 is an always-green, test-driven development repository. Beginning with Wave 2, every
-runtime behavior or bug fix requires a green test contract pull request to merge into `main`
-before its implementation branch is created. The implementation pull request binds those
-already-merged assertions to production code without weakening them.
+ACA-3 is an always-green-main, test-driven development repository. Beginning with Wave 2,
+contributors write and observe a production-facing test failing before implementing the
+behavior. The test commit precedes the implementation commit, and both normally merge in
+one green pull request after the red-green-refactor cycle is complete.
 
-See the [wave delivery plan and tests-first merge gate](docs/architecture/wave-plan.md) and
+See the [wave delivery plan and test-driven workflow](docs/architecture/wave-plan.md) and
 [contribution instructions](CONTRIBUTING.md).
 
 ## v1 stages

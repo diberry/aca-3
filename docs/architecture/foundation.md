@@ -6,7 +6,7 @@ When requirements conflict, use this order:
 
 1. Accepted architecture decision records in `docs/adr`.
 2. Enforced repository contracts and security tests.
-3. The tests-first merge gate in `docs/architecture/wave-plan.md`.
+3. The test-driven development workflow in `docs/architecture/wave-plan.md`.
 4. Architecture and operations documentation in `docs`.
 5. Root toolchain manifests and the pnpm lockfile.
 6. Source implementation.

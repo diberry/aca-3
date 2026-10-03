@@ -10,55 +10,62 @@
 | 3 | Stage 2 | Independently deployed internal Author runtime microfrontend | Planned |
 | 4 | Stage 3 | Author reaches the internal Backend through managed workload identity | Planned |
 
-Wave 1 was already implemented before the tests-first merge policy was adopted. It is the
-last wave allowed to combine new assertions and production behavior in one pull request.
 The policy below applies to all new runtime behavior beginning with Wave 2.
 
-## Tests-first merge gate
+## Test-driven development workflow
 
-ACA-3 is an always-green, test-driven development repository. Tests that define a behavior
-must be merged into `main` before production code that is exercised by those tests can be merged.
+ACA-3 is an always-green-main, test-driven development repository. Tests must be written
+and observed failing for the expected reason before the production behavior that makes
+them pass is written. Tests and implementation normally merge together in one pull request.
 
-Every behavior change uses two pull requests in this order:
+Every behavior change uses this sequence:
 
-1. **Test contract pull request**
+1. **Red**
    - Branch directly from current `origin/main`.
-   - Add the executable contract, assertions, fixtures, and test harness.
-   - Do not add the production implementation.
-   - Demonstrate that the contract can detect an invalid reference fixture.
-   - Keep `main` green by running the contract against a test-only reference fixture when
-     production binding does not exist yet.
-   - Merge this pull request before creating the implementation branch.
-2. **Implementation pull request**
-   - Fetch the test merge and branch from the updated `origin/main`.
-   - Bind the already-merged contract suite to the production implementation.
-   - Do not weaken, skip, or rewrite the merged assertions.
-   - Make the existing contract, security, integration, smoke, and build checks pass.
-   - Reference the merged test pull request and merge commit.
+   - Add a production-facing test before changing the production behavior.
+   - Run the smallest relevant test command and confirm that the new assertion fails for
+     the expected missing or incorrect behavior.
+   - Commit the failing test before the implementation. A draft pull request may be red
+     during this step; `main` must remain green.
+2. **Green**
+   - Add the smallest production change that makes the new test pass.
+   - Run the focused test and all directly affected validation.
+3. **Refactor**
+   - Improve the test and production code without changing the required behavior.
+   - Run the complete required validation and make the pull request green.
+4. **Merge**
+   - Merge the tests and implementation together only after required checks pass.
 
-If implementation reveals that an assertion or contract is wrong, stop implementation.
-Correct and merge the test contract in a separate pull request first, update from `main`,
-and then continue the implementation.
+Tests must exercise the production boundary directly. Do not create a surrogate implementation
+or test-only reference fixture solely to make assertions pass before production exists.
+
+If implementation reveals that an assertion or contract is wrong, correct it in the same
+pull request and explain why. Do not weaken an assertion merely to accommodate the implementation.
 
 ## Green-main rules
 
 - Do not merge deliberately failing tests into `main`.
+- A feature branch or draft pull request may temporarily be red during the red step.
+- The test commit must precede the production implementation commit.
 - Do not use `skip`, `todo`, `test.fails`, broad error swallowing, conditional success, or
-  placeholder assertions to make a test contract pull request pass.
-- Test-only reference fixtures must be clearly named and must never be imported by production code.
-- Implementation pull requests may add production test adapters or suite registration, but
-  the behavior assertions must already exist on `main`.
-- Bug fixes follow the same sequence: merge a reproducing regression contract first, then
-  branch from updated `main` and implement the fix.
+  placeholder assertions to bypass the red or green step.
+- New tests must run against production code, not a duplicate implementation maintained for tests.
+- Bug fixes follow the same sequence: reproduce the defect with a failing regression test,
+  then implement the fix in the same pull request.
+- Public API and contract changes include their corresponding test updates in the same pull request.
 - Documentation-only, governance-only, and build-maintenance changes that do not alter runtime
-  behavior do not require a preceding test contract pull request, but all existing validation
-  remains mandatory.
+  behavior do not require red-step evidence, but all existing validation remains mandatory.
+
+A separate test pull request is appropriate only when it is independently useful and green
+without surrogate production behavior, such as characterization tests for existing behavior,
+a reusable test harness, or independently versioned contracts and schemas.
 
 ## Pull request evidence
 
-A behavior implementation pull request is not merge-ready without:
+A behavior pull request is not merge-ready without:
 
-- the URL and merge commit of the preceding test contract pull request;
-- evidence that the implementation branch contains that merge;
-- the unchanged merged assertions running against production code;
+- the failing-test commit SHA;
+- the exact focused test command and the expected reason it failed before implementation;
+- confirmation that the test exercises production code;
+- an explanation for any assertion changed after implementation began;
 - all repository validation and security checks passing.
