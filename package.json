@@ -1,0 +1,35 @@
+{
+  "name": "aca-platform",
+  "version": "0.0.0",
+  "private": true,
+  "description": "ACA platform monorepo foundation",
+  "type": "module",
+  "packageManager": "pnpm@12.7.0",
+  "engines": {
+    "node": "24.21.0",
+    "pnpm": "12.7.0"
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "lint": "biome lint .",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit --project tsconfig.json",
+    "validate": "biome format . && biome lint . && tsc --noEmit --project tsconfig.json && vitest run && tsc --project tsconfig.build.json && node scripts/validate-workflows.mjs",
+    "validate:workflows": "node scripts/validate-workflows.mjs"
+  },
+  "dependencies": {
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.14",
+    "@types/node": "24.19.0",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "typescript": "7.0.2",
+    "vitest": "5.0.2",
+    "yaml": "2.9.1"
+  }
+}
