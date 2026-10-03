@@ -20,6 +20,18 @@ routes.
 See [the trust-boundary diagram](docs/architecture/trust-boundaries.md) and
 [the foundation architecture](docs/architecture/foundation.md).
 
+## Development policy
+
+ACA-3 is an always-green-main, test-driven development repository. Beginning with Wave 2,
+contributors write and observe a production-facing test failing before implementing the
+behavior. The test commit precedes the implementation commit, and both normally merge in
+one green pull request after the red-green-refactor cycle is complete.
+
+See the [wave delivery plan and test-driven workflow](docs/architecture/wave-plan.md) and
+[contribution instructions](CONTRIBUTING.md). The
+[GitHub enforcement guide](docs/operations/github-enforcement.md) documents the required
+policy check and idempotent repository configuration scripts.
+
 ## v1 stages
 
 v1 is limited to Stages 0 through 3:

@@ -1,0 +1,8 @@
+{
+  "pullRequests": [
+    {
+      "number": 3,
+      "reason": "Wave 1 was implemented before the TDD policy was adopted; enforcement begins with Wave 2."
+    }
+  ]
+}
