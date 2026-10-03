@@ -51,8 +51,8 @@ not part of v1.
 | pnpm | 12.7.0 |
 | TypeScript | 7.0.2 |
 | React / React DOM | 19.3.0 |
-| Biome | 2.5.14 |
-| Vitest | 5.0.2 |
+| Biome | 2.5.15 |
+| Vitest | 5.0.3 |
 
 Node.js is pinned in `.node-version`, `.nvmrc`, and `package.json`. pnpm and every direct
 dependency are exact-pinned. The lockfile is authoritative for transitive dependencies.

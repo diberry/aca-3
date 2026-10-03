@@ -7,7 +7,11 @@ function readRepositoryFile(file: string): string {
 }
 
 const manifest = JSON.parse(readRepositoryFile("package.json"));
-const lockfile = parseAllDocuments(readRepositoryFile("pnpm-lock.yaml"))[1].toJS();
+const dependencyDocument = parseAllDocuments(readRepositoryFile("pnpm-lock.yaml"))[1];
+if (!dependencyDocument) {
+  throw new Error("The lockfile must contain the project dependency document.");
+}
+const lockfile = dependencyDocument.toJS();
 const readme = readRepositoryFile("README.md");
 const adr = readRepositoryFile("docs/adr/0004-pinned-monorepo-toolchain.md");
 const biome = JSON.parse(readRepositoryFile("biome.json"));

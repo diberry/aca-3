@@ -10,11 +10,19 @@ applications and shared packages.
 
 ## Decision
 
-Use a pnpm workspace with Node.js `24.21.0` LTS (Krypton), pnpm `12.7.0`,
+The original decision used a pnpm workspace with Node.js `24.21.0` LTS (Krypton), pnpm `12.7.0`,
 TypeScript `7.0.2`, React and React DOM `19.3.0`, Biome `2.5.14`, and Vitest
 `5.0.2`. Exact versions were resolved on 2026-10-03 from the official Node.js release
 index and npm registry metadata. Direct dependencies use exact versions and the pnpm
 lockfile pins transitive dependencies.
+
+### Amendment: reviewed dependency update (2026-10-03)
+
+[Dependency PR #2](https://github.com/diberry/aca-3/pull/2) updated the exact pins to
+Biome `2.5.15` and Vitest `5.0.3`, superseding only those two versions in the original
+decision. `package.json` is authoritative for current direct dependency versions;
+`pnpm-lock.yaml`, the README toolchain table, and the Biome schema URL must agree with it
+where applicable. The original decision date and exact-pin policy remain unchanged.
 
 ## Alternatives
 
