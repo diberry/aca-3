@@ -188,6 +188,9 @@ importers:
       typescript:
         specifier: 7.0.2
         version: 7.0.2
+      vite:
+        specifier: 8.3.1
+        version: 8.3.1(@types/node@26.6.3)(yaml@2.9.1)
       vitest:
         specifier: 5.0.3
         version: 5.0.3(@types/node@26.6.3)(vite@8.3.1(@types/node@26.6.3)(yaml@2.9.1))
@@ -209,13 +212,23 @@ importers:
         specifier: 19.3.0
         version: 19.3.0
 
-  src/auth: {}
+  src/auth:
+    dependencies:
+      react:
+        specifier: 19.3.0
+        version: 19.3.0
+      react-dom:
+        specifier: 19.3.0
+        version: 19.3.0(react@19.3.0)
 
   src/author:
     dependencies:
       react:
         specifier: 19.3.0
         version: 19.3.0
+      react-dom:
+        specifier: 19.3.0
+        version: 19.3.0(react@19.3.0)
 
   src/backend: {}
 

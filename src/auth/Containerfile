@@ -1,0 +1,19 @@
+FROM node:24.21.0-alpine@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1 AS build
+WORKDIR /workspace
+RUN corepack enable && corepack prepare pnpm@12.7.0 --activate
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc tsconfig.json tsconfig.build.json ./
+COPY packages ./packages
+COPY src ./src
+RUN pnpm install --frozen-lockfile
+RUN pnpm build:auth
+
+FROM node:24.21.0-alpine@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PORT=8080
+ENV SPA_FALLBACK=true
+COPY scripts/static-server.mjs ./scripts/static-server.mjs
+COPY --from=build /workspace/dist/apps/auth ./public
+EXPOSE 8080
+USER node
+CMD ["node", "scripts/static-server.mjs", "public"]

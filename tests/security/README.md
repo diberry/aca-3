@@ -1,3 +1,4 @@
 # Security tests
 
-Stage 0 will add negative tests for forged identity headers, anonymous protected-content access, and local-auth gating.
+Stage 0 includes negative tests for forged identity headers and local-auth gating. Real
+provider and anonymous protected-content tests begin in Stage 1.

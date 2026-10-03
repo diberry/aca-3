@@ -1,3 +1,4 @@
 # End-to-end tests
 
-Stage 0 will add browser tests that prove protected traffic uses only the Auth/Shell origin.
+Stage 0 loader tests and the local-stack smoke test prove protected traffic uses only the
+Auth/Shell origin. Full browser automation remains a later hardening step.
