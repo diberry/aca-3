@@ -155,10 +155,10 @@ review applicable Azure Policy before `azd provision`.
 | Provider scripts | PowerShell parser and `bash -n` over all paired scripts | Pass |
 | Auth CLI contract | Azure CLI `2.82.0` help for Entra, Google, GitHub, and global auth commands plus recording-mock tests | Pass; all provider updates require `--client-secret-name` |
 | Focused green | `node_modules\.bin\vitest.cmd run tests/deployment/stage1-contract.test.ts` | 11 passed, including both shells and all four Key Vault failure-cleanup paths |
-| Full repository | `npm run validate` (same pinned script as `pnpm validate`; local pnpm bootstrap was blocked by registry TLS) | 8 files / 38 tests passed; build, workflows, pins, smoke passed |
+| Full repository | Local `npm run validate` plus pinned `pnpm validate` in https://github.com/diberry/aca-3/actions/runs/37216618008 | 8 files / 38 tests passed; build, workflows, pins, smoke passed |
 | Browser E2E | `npm run test:e2e` with a local uncommitted `pnpm dev` shim | 3 Chromium tests passed |
-| Container/package | https://github.com/diberry/aca-3/actions/runs/37214946033/job/111473445250 | Pass; pinned Auth, Author, and Backend container builds completed |
-| PR policy | https://github.com/diberry/aca-3/actions/runs/37214946239 | Pass |
+| Container/package | https://github.com/diberry/aca-3/actions/runs/37216618008/job/111478315392 | Pass; pinned Auth, Author, and Backend container builds completed |
+| PR policy | https://github.com/diberry/aca-3/actions/runs/37216618007 | Pass |
 | **Workflow Validation (2026-10-04)** | | |
 | AZD Installation | `azd version` | Installed (`1.32.0`); Update available: 1.35.0 |
 | Project Build | `npm run build` (tsc + vite build) | Pass; Auth and Author builds completed successfully |
@@ -171,6 +171,6 @@ review applicable Azure Policy before `azd provision`.
 
 The local Docker build and Corepack pnpm bootstrap reached the pinned package download but the
 workstation connection rejected the npm registry TLS handshake. The same immutable
-Containerfiles passed in the clean GitHub Actions `validate` job above, providing the required
-container/package evidence without changing pins or weakening the build. The revision's CI run
-must pass the same checks before the PR is considered ready.
+Containerfiles and pinned `pnpm validate` passed in the clean GitHub Actions jobs above,
+providing the required package and container evidence without changing pins or weakening the
+build.
