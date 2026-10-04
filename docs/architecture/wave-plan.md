@@ -5,10 +5,20 @@
 | Wave | Stage | Outcome | Status |
 |---|---|---|---|
 | 0 | Foundation | Pinned monorepo, governance, trust boundaries, and delivery controls | Complete |
-| 1 | Stage 0 | Local Auth/Shell loads Author and reaches Backend through one origin | In review |
-| 2 | Stage 1 | Deployed public Auth/Shell with real social authentication | Planned |
+| 1 | Stage 0 | Local Auth/Shell loads Author and reaches Backend through one origin | Conditionally complete - global prerequisites and tag open |
+| 2 | Stage 1 | Deployed public Auth/Shell with real social authentication | Planned - blocked by Wave 1 conditions |
 | 3 | Stage 2 | Independently deployed internal Author runtime microfrontend | Planned |
 | 4 | Stage 3 | Author reaches the internal Backend through managed workload identity | Planned |
+
+Wave 1's local implementation and validation gates are satisfied. Its
+[Stage 0 acceptance record](stage-0-acceptance.md) documents a Conditional Go because the
+mandatory global prerequisites do not yet have verifiable evidence or accountable owners and
+the baseline tag does not exist. The open conditions cover subscription/region/permissions,
+Entra tenant ownership, provider application ownership, secret-management ownership, the
+environment promotion path, required Azure tooling, and the final acceptance record and tag.
+Do not imply final Stage 0 completion or advance to Wave 2 until every condition is evidenced,
+the designated reviewer records a final Go, and annotated tag `v0.0.0-stage.0` identifies the
+final accepted commit.
 
 The policy below applies to all new runtime behavior beginning with Wave 2.
 

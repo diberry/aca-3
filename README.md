@@ -100,9 +100,13 @@ verification are documented in the [Playwright browser test guide](tests/e2e/REA
 - **Wave 0:** Complete and merged.
 - **Wave 1 / Stage 0:** Local shell, Author runtime microfrontend, Backend, local auth gate,
   header hardening, safe fallbacks, container definitions, automated tests, and smoke
-  validation are implemented.
+  validation are implemented. This is local implementation readiness, not final stage
+  completion. The
+  [Stage 0 acceptance record](docs/architecture/stage-0-acceptance.md) records a Conditional
+  Go pending evidence and ownership for the mandatory global prerequisites, final reviewer
+  acceptance, and creation of the baseline tag.
 - **Deferred:** Azure provisioning, real identity providers, managed identities, public
-  deployment, and Stages 1–3.
+  deployment, and Stages 1–3. Stage 1 remains blocked by the open Stage 0 conditions.
 
 See [Stage 0 architecture](docs/architecture/stage-0-local.md) and
 [local development operations](docs/operations/local-development.md).
