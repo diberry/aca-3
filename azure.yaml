@@ -1,0 +1,14 @@
+name: aca-3
+
+infra:
+  provider: bicep
+  path: infra
+
+services:
+  auth:
+    project: .
+    host: containerapp
+    language: js
+    docker:
+      path: src/auth/Containerfile
+      context: .

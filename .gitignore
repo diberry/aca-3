@@ -1,5 +1,6 @@
 node_modules/
 dist/
+infra/main.json
 coverage/
 test-results/
 playwright-report/
