@@ -17,16 +17,35 @@ case "$provider" in
 esac
 
 secret=
+terminal_state=
 cleanup() {
+  status=$?
+  trap - EXIT
+  if [ -n "$terminal_state" ]; then
+    stty "$terminal_state" < /dev/tty 2>/dev/null || true
+    printf "\n" >&2
+    terminal_state=
+  fi
   secret=
   unset secret
+  exit "$status"
 }
-trap cleanup EXIT HUP INT TERM
+trap cleanup EXIT
+trap 'exit 129' HUP
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+if [ ! -t 0 ] || [ ! -t 2 ]; then
+  echo "Secret input requires an interactive terminal." >&2
+  exit 2
+fi
 
 printf "Enter the new %s client secret: " "$provider" >&2
-stty -echo
+terminal_state=$(stty -g < /dev/tty)
+stty -echo < /dev/tty
 IFS= read -r secret
-stty echo
+stty "$terminal_state" < /dev/tty
+terminal_state=
 printf "\n" >&2
 
 az keyvault secret set \

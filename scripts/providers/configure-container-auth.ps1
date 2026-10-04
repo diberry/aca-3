@@ -47,20 +47,20 @@ if ($LASTEXITCODE -ne 0) { throw "Configuring Key Vault references failed." }
 
 & az containerapp auth microsoft update --resource-group $ResourceGroup --name $ContainerApp `
     --client-id $EntraClientId `
-    --client-secret-setting-name entra-provider-secret `
+    --client-secret-name entra-provider-secret `
     --issuer "https://login.microsoftonline.com/$TenantId/v2.0" `
     --yes --only-show-errors --output none
 if ($LASTEXITCODE -ne 0) { throw "Configuring Entra authentication failed." }
 
 & az containerapp auth google update --resource-group $ResourceGroup --name $ContainerApp `
     --client-id $GoogleClientId `
-    --client-secret-setting-name google-provider-secret `
+    --client-secret-name google-provider-secret `
     --yes --only-show-errors --output none
 if ($LASTEXITCODE -ne 0) { throw "Configuring Google authentication failed." }
 
 & az containerapp auth github update --resource-group $ResourceGroup --name $ContainerApp `
     --client-id $GitHubClientId `
-    --client-secret-setting-name github-provider-secret `
+    --client-secret-name github-provider-secret `
     --yes --only-show-errors --output none
 if ($LASTEXITCODE -ne 0) { throw "Configuring GitHub authentication failed." }
 

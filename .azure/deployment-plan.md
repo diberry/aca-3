@@ -81,10 +81,12 @@ versions are selected to avoid preview dependencies.
   by default so an authorized operator can perform initial secret ingestion. A later private
   endpoint change requires separate network design and approval.
 - ACR has anonymous pull and admin credentials disabled.
-- Bicep outputs only resource names, endpoints, image name, and revision/FQDN metadata; no
-  credential, tenant, subscription, or secret value is output.
+- Bicep outputs only resource names and IDs, endpoints, image name, and revision/FQDN metadata;
+  the managed-identity resource ID is exposed non-secretly for provider cutover. No credential,
+  tenant, subscription, or secret value is output.
 - Provider scripts suppress command output containing credential material and clear in-memory
-  values in `finally`/trap cleanup.
+  values in `finally`/trap cleanup. Entra scripts identify each newly appended credential and
+  revoke only that credential if Key Vault ingestion fails.
 - Later deployment must use `azd provision` preview/what-if review before application deployment.
 
 ## Role assignment verification
@@ -147,13 +149,14 @@ review applicable Azure Policy before `azd provision`.
 | Red contract | `pnpm exec vitest run tests/deployment/stage1-contract.test.ts` at `0a6a4ad` | Expected 5 failures for missing production artifacts |
 | Red CI | https://github.com/diberry/aca-3/actions/runs/37214331388/job/111471670390 | Expected `test` failure recorded |
 | azd | `azd version` | Installed (`1.32.0`) |
-| `azure.yaml` | Azure Developer CLI official schema validator | Pass |
+| `azure.yaml` | `azd show --output json` | Pass; official parser recognized the Node Auth service without cloud access |
 | Bicep | `az bicep build --file infra\main.bicep`; `az bicep lint --file infra\main.bicep` | Pass, no template diagnostics |
 | ARM template | Bicep build emitted valid `infra\main.json`; generated file removed/ignored | Pass |
 | Provider scripts | PowerShell parser and `bash -n` over all paired scripts | Pass |
-| Auth CLI contract | Help/schema lookup for Entra, Google, GitHub, and global auth commands | Pass |
-| Focused green | `pnpm exec vitest run tests/deployment/stage1-contract.test.ts` | 5 passed |
-| Full repository | `pnpm validate` | 8 files / 32 tests passed; build, workflows, pins, smoke passed |
+| Auth CLI contract | Azure CLI `2.82.0` help for Entra, Google, GitHub, and global auth commands plus recording-mock tests | Pass; all provider updates require `--client-secret-name` |
+| Focused green | `node_modules\.bin\vitest.cmd run tests/deployment/stage1-contract.test.ts` | 11 passed, including both shells and all four Key Vault failure-cleanup paths |
+| Full repository | `npm run validate` (same pinned script as `pnpm validate`; local pnpm bootstrap was blocked by registry TLS) | 8 files / 38 tests passed; build, workflows, pins, smoke passed |
+| Browser E2E | `npm run test:e2e` with a local uncommitted `pnpm dev` shim | 3 Chromium tests passed |
 | Container/package | https://github.com/diberry/aca-3/actions/runs/37214946033/job/111473445250 | Pass; pinned Auth, Author, and Backend container builds completed |
 | PR policy | https://github.com/diberry/aca-3/actions/runs/37214946239 | Pass |
 | **Workflow Validation (2026-10-04)** | | |
@@ -166,7 +169,8 @@ review applicable Azure Policy before `azd provision`.
 | Role Assignments | Static code review of `role-assignments.bicep` | Pass; AcrPull and KeyVault Secrets User roles correctly scoped to resources |
 | Role Dependency | Main template dependency graph | Pass; authShell depends on roleAssignments; correct provisioning order |
 
-The local Docker build reached the pinned container build but the workstation Docker engine
-rejected the npm registry TLS handshake. The same immutable Containerfiles passed in the clean
-GitHub Actions `validate` job above, providing the required container/package evidence without
-changing pins or weakening the build.
+The local Docker build and Corepack pnpm bootstrap reached the pinned package download but the
+workstation connection rejected the npm registry TLS handshake. The same immutable
+Containerfiles passed in the clean GitHub Actions `validate` job above, providing the required
+container/package evidence without changing pins or weakening the build. The revision's CI run
+must pass the same checks before the PR is considered ready.

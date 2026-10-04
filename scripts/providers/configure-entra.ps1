@@ -26,6 +26,8 @@ function Invoke-AzText {
 }
 
 $secret = $null
+$newCredentialKeyId = $null
+$credentialStored = $false
 try {
     if ([string]::IsNullOrWhiteSpace($ApplicationId)) {
         $ApplicationId = Invoke-AzText ad app create `
@@ -47,6 +49,14 @@ try {
         }
     }
 
+    $previousCredentialKeyIds = @(
+        (Invoke-AzText ad app credential list `
+                --id $ApplicationId `
+                --query '[].keyId' `
+                --output tsv `
+                --only-show-errors) -split '\r?\n' | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+    )
+
     $secret = Invoke-AzText ad app credential reset `
         --id $ApplicationId `
         --append `
@@ -55,6 +65,21 @@ try {
         --query password `
         --output tsv `
         --only-show-errors
+
+    $currentCredentialKeyIds = @(
+        (Invoke-AzText ad app credential list `
+                --id $ApplicationId `
+                --query '[].keyId' `
+                --output tsv `
+                --only-show-errors) -split '\r?\n' | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+    )
+    $createdCredentialKeyIds = @(
+        $currentCredentialKeyIds | Where-Object { $_ -notin $previousCredentialKeyIds }
+    )
+    if ($createdCredentialKeyIds.Count -ne 1) {
+        throw "Could not uniquely identify the newly created Entra credential."
+    }
+    $newCredentialKeyId = $createdCredentialKeyIds[0]
 
     & az keyvault secret set `
         --vault-name $VaultName `
@@ -76,8 +101,23 @@ try {
         throw "Storing the Entra client identifier in Key Vault failed."
     }
 
+    $credentialStored = $true
     Write-Host 'Entra application configuration and Key Vault storage completed.'
+}
+catch {
+    if (-not $credentialStored -and -not [string]::IsNullOrWhiteSpace($newCredentialKeyId)) {
+        & az ad app credential delete `
+            --id $ApplicationId `
+            --key-id $newCredentialKeyId `
+            --only-show-errors `
+            --output none
+        if ($LASTEXITCODE -ne 0) {
+            Write-Warning 'Automatic cleanup of the newly created Entra credential failed; no prior credential was changed.'
+        }
+    }
+    throw
 }
 finally {
     $secret = $null
+    $newCredentialKeyId = $null
 }

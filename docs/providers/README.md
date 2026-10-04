@@ -124,9 +124,154 @@ secret remains active.
 
 ## Configure Container Apps built-in authentication
 
-After all three secret names exist, run `configure-container-auth.ps1` or
-`configure-container-auth.sh`. Supply the runtime-selected resource group, Container App,
-managed-identity resource ID, vault, tenant, and provider client IDs. The scripts:
+The scripts require Azure CLI 2.82.0 or later. They use the current core
+`az containerapp auth <provider> update --client-secret-name` contract. If a separately installed
+`containerapp` extension overrides the core commands, update it and confirm that each provider's
+`update --help` includes `--client-secret-name` before continuing. The obsolete
+`--client-secret-setting-name` option is not supported.
+
+After all three secret names exist, use one complete sequence below. Each sequence obtains azd
+outputs and runtime tenant data without displaying them, queries the user-assigned identity
+resource ID, prompts for the two externally managed client IDs, configures built-in auth, verifies
+all providers and the global policy, and only then deploys Auth/Shell.
+
+### PowerShell cutover
+
+```powershell
+$resourceGroup = azd env get-value AZURE_RESOURCE_GROUP
+$containerApp = azd env get-value AZURE_AUTH_APP_NAME
+$identityName = azd env get-value AZURE_AUTH_IDENTITY_NAME
+$vaultName = azd env get-value AZURE_KEY_VAULT_NAME
+$identityResourceId = az identity show `
+  --resource-group $resourceGroup `
+  --name $identityName `
+  --query id --output tsv --only-show-errors
+$tenantId = az account show --query tenantId --output tsv --only-show-errors
+$entraClientId = az keyvault secret show `
+  --vault-name $vaultName `
+  --name entra-client-id `
+  --query value --output tsv --only-show-errors
+$googleClientId = Read-Host 'Google OAuth client ID'
+$gitHubClientId = Read-Host 'GitHub OAuth client ID'
+
+.\scripts\providers\configure-container-auth.ps1 `
+  -ResourceGroup $resourceGroup `
+  -ContainerApp $containerApp `
+  -ManagedIdentityResourceId $identityResourceId `
+  -VaultName $vaultName `
+  -TenantId $tenantId `
+  -EntraClientId $entraClientId `
+  -GoogleClientId $googleClientId `
+  -GitHubClientId $gitHubClientId
+
+$providers = @('microsoft', 'google', 'github')
+foreach ($provider in $providers) {
+  $configured = az containerapp auth $provider show `
+    --resource-group $resourceGroup `
+    --name $containerApp `
+    --query 'registration.clientId != null' `
+    --output tsv --only-show-errors
+  if ($configured -ne 'true') { throw "$provider authentication verification failed." }
+}
+$authEnabled = az containerapp auth show `
+  --resource-group $resourceGroup `
+  --name $containerApp `
+  --query enabled `
+  --output tsv --only-show-errors
+$unauthenticatedAction = az containerapp auth show `
+  --resource-group $resourceGroup `
+  --name $containerApp `
+  --query globalValidation.unauthenticatedClientAction `
+  --output tsv --only-show-errors
+$redirectProvider = az containerapp auth show `
+  --resource-group $resourceGroup `
+  --name $containerApp `
+  --query globalValidation.redirectToProvider `
+  --output tsv --only-show-errors
+if (
+  $authEnabled -ne 'true' -or
+  $unauthenticatedAction -ne 'RedirectToLoginPage' -or
+  $redirectProvider -ine 'azureactivedirectory'
+) {
+  throw 'Global authentication policy verification failed.'
+}
+
+azd deploy auth
+```
+
+### POSIX cutover
+
+```sh
+resource_group=$(azd env get-value AZURE_RESOURCE_GROUP)
+container_app=$(azd env get-value AZURE_AUTH_APP_NAME)
+identity_name=$(azd env get-value AZURE_AUTH_IDENTITY_NAME)
+vault_name=$(azd env get-value AZURE_KEY_VAULT_NAME)
+identity_resource_id=$(az identity show \
+  --resource-group "$resource_group" \
+  --name "$identity_name" \
+  --query id --output tsv --only-show-errors)
+tenant_id=$(az account show --query tenantId --output tsv --only-show-errors)
+entra_client_id=$(az keyvault secret show \
+  --vault-name "$vault_name" \
+  --name entra-client-id \
+  --query value --output tsv --only-show-errors)
+printf "Google OAuth client ID: " >&2
+IFS= read -r google_client_id
+printf "GitHub OAuth client ID: " >&2
+IFS= read -r github_client_id
+
+./scripts/providers/configure-container-auth.sh \
+  "$resource_group" \
+  "$container_app" \
+  "$identity_resource_id" \
+  "$vault_name" \
+  "$tenant_id" \
+  "$entra_client_id" \
+  "$google_client_id" \
+  "$github_client_id"
+
+for provider in microsoft google github; do
+  configured=$(az containerapp auth "$provider" show \
+    --resource-group "$resource_group" \
+    --name "$container_app" \
+    --query 'registration.clientId != null' \
+    --output tsv --only-show-errors)
+  [ "$configured" = "true" ] || {
+    echo "$provider authentication verification failed." >&2
+    exit 1
+  }
+done
+auth_enabled=$(az containerapp auth show \
+  --resource-group "$resource_group" \
+  --name "$container_app" \
+  --query enabled \
+  --output tsv --only-show-errors)
+unauthenticated_action=$(az containerapp auth show \
+  --resource-group "$resource_group" \
+  --name "$container_app" \
+  --query globalValidation.unauthenticatedClientAction \
+  --output tsv --only-show-errors)
+redirect_provider=$(az containerapp auth show \
+  --resource-group "$resource_group" \
+  --name "$container_app" \
+  --query globalValidation.redirectToProvider \
+  --output tsv --only-show-errors)
+[ "$auth_enabled" = "true" ] &&
+  [ "$unauthenticated_action" = "RedirectToLoginPage" ] &&
+  {
+    [ "$redirect_provider" = "azureactivedirectory" ] ||
+      [ "$redirect_provider" = "azureActiveDirectory" ]
+  } || {
+  echo "Global authentication policy verification failed." >&2
+  exit 1
+}
+
+azd deploy auth
+```
+
+The non-secret `AZURE_AUTH_IDENTITY_RESOURCE_ID` azd output is also available for auditing, but
+the sequences deliberately query `az identity show` so the cutover verifies the deployed
+identity. The scripts:
 
 1. Add versioned Key Vault references as Container App secrets.
 2. Configure Entra, Google, and GitHub providers.

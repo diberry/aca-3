@@ -27,18 +27,18 @@ az containerapp secret set --resource-group "$resource_group" --name "$container
 
 az containerapp auth microsoft update --resource-group "$resource_group" --name "$container_app" \
   --client-id "$entra_client_id" \
-  --client-secret-setting-name entra-provider-secret \
+  --client-secret-name entra-provider-secret \
   --issuer "https://login.microsoftonline.com/$tenant_id/v2.0" \
   --yes --only-show-errors --output none
 
 az containerapp auth google update --resource-group "$resource_group" --name "$container_app" \
   --client-id "$google_client_id" \
-  --client-secret-setting-name google-provider-secret \
+  --client-secret-name google-provider-secret \
   --yes --only-show-errors --output none
 
 az containerapp auth github update --resource-group "$resource_group" --name "$container_app" \
   --client-id "$github_client_id" \
-  --client-secret-setting-name github-provider-secret \
+  --client-secret-name github-provider-secret \
   --yes --only-show-errors --output none
 
 az containerapp auth update --resource-group "$resource_group" --name "$container_app" \

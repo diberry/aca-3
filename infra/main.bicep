@@ -125,6 +125,7 @@ output AZURE_LOG_ANALYTICS_WORKSPACE_ID string = logAnalytics.outputs.id
 output AZURE_CONTAINER_APP_ENVIRONMENT_NAME string = containerAppsEnvironment.outputs.name
 output AZURE_AUTH_APP_NAME string = authShell.outputs.name
 output AZURE_AUTH_IDENTITY_NAME string = managedIdentity.outputs.name
+output AZURE_AUTH_IDENTITY_RESOURCE_ID string = managedIdentity.outputs.id
 output AUTH_URL string = 'https://${authShell.outputs.fqdn}'
 output AUTH_REVISION_NAME string = authShell.outputs.latestRevisionName
 output AUTH_IMAGE_NAME string = authShell.outputs.imageName
