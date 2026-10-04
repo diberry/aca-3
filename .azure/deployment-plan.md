@@ -156,6 +156,15 @@ review applicable Azure Policy before `azd provision`.
 | Full repository | `pnpm validate` | 8 files / 32 tests passed; build, workflows, pins, smoke passed |
 | Container/package | https://github.com/diberry/aca-3/actions/runs/37214946033/job/111473445250 | Pass; pinned Auth, Author, and Backend container builds completed |
 | PR policy | https://github.com/diberry/aca-3/actions/runs/37214946239 | Pass |
+| **Workflow Validation (2026-10-04)** | | |
+| AZD Installation | `azd version` | Installed (`1.32.0`); Update available: 1.35.0 |
+| Project Build | `npm run build` (tsc + vite build) | Pass; Auth and Author builds completed successfully |
+| Bicep Build | `az bicep build --file infra/main.bicep` | Pass; no diagnostics |
+| JSON Parameters | `infra/main.parameters.json` schema validation | Pass; valid Azure deployment parameters schema |
+| pnpm-lock.yaml | Docker build context validation | Pass; exists and ready for immutable Docker build |
+| Docker Context | `src/auth/Containerfile` validation | Pass; pinned base image, multi-stage build, uses pnpm --frozen-lockfile |
+| Role Assignments | Static code review of `role-assignments.bicep` | Pass; AcrPull and KeyVault Secrets User roles correctly scoped to resources |
+| Role Dependency | Main template dependency graph | Pass; authShell depends on roleAssignments; correct provisioning order |
 
 The local Docker build reached the pinned container build but the workstation Docker engine
 rejected the npm registry TLS handshake. The same immutable Containerfiles passed in the clean
