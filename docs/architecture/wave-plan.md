@@ -5,10 +5,15 @@
 | Wave | Stage | Outcome | Status |
 |---|---|---|---|
 | 0 | Foundation | Pinned monorepo, governance, trust boundaries, and delivery controls | Complete |
-| 1 | Stage 0 | Local Auth/Shell loads Author and reaches Backend through one origin | In review |
+| 1 | Stage 0 | Local Auth/Shell loads Author and reaches Backend through one origin | Conditional Go - merge/tag pending |
 | 2 | Stage 1 | Deployed public Auth/Shell with real social authentication | Planned |
 | 3 | Stage 2 | Independently deployed internal Author runtime microfrontend | Planned |
 | 4 | Stage 3 | Author reaches the internal Backend through managed workload identity | Planned |
+
+Wave 1's implementation and validation gates are satisfied. Its
+[Stage 0 acceptance record](stage-0-acceptance.md) documents a Conditional Go because the
+completion pull request must merge before the baseline tag can identify the accepted record.
+Do not advance to Wave 2 until annotated tag `v0.0.0-stage.0` exists on that merge commit.
 
 The policy below applies to all new runtime behavior beginning with Wave 2.
 
