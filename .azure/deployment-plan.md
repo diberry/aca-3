@@ -1,6 +1,6 @@
 # ACA-3 Stage 1 Deployment Plan
 
-**Status:** Ready for Validation
+**Status:** Validated — Ready for User Provisioning
 **Scope:** Preparation and validation only; no provisioning or deployment.
 **Tracking issue:** https://github.com/diberry/aca-3/issues/12
 
@@ -11,8 +11,8 @@
 - [x] Finalize the Stage 1 Auth/Shell preparation design.
 - [x] Add failing deployment-contract tests and record red evidence.
 - [x] Implement parameterized azd, Bicep, provider scripts, and documentation.
-- [ ] Validate without provisioning or deployment.
-- [ ] Set final status to `Validated — Ready for User Provisioning`.
+- [x] Validate without provisioning or deployment.
+- [x] Set final status to `Validated — Ready for User Provisioning`.
 
 ## Prohibited actions
 
@@ -117,25 +117,47 @@ versions are selected to avoid preview dependencies.
 
 ## Validation evidence
 
-- [ ] All validation checks pass
-  - [ ] AZD installation
-  - [ ] Schema validation
-  - [ ] Environment setup (deferred: operator selects context later)
-  - [ ] Authentication check (no login or context changes during preparation)
-  - [ ] Subscription/location check (deferred: runtime input)
+- [x] All authorized preparation validation checks pass
+  - [x] AZD installation
+  - [x] Schema validation
+  - [x] Environment setup deferred by boundary: operator selects context later
+  - [x] Authentication check deferred by boundary: no login or context changes during preparation
+  - [x] Subscription/location check deferred by boundary: runtime input
   - [x] Aspire pre-provisioning checks (not an Aspire project)
-  - [ ] Provision preview (deferred to later operator-run context)
-  - [ ] Build verification
-  - [ ] Docker build context validation
-  - [ ] Package validation
-  - [ ] Azure Policy validation (deferred until subscription selection)
+  - [x] Provision preview deferred by boundary to later operator-run context
+  - [x] Build verification
+  - [x] Docker build context validation
+  - [x] Package validation through the repository's pinned container build workflow
+  - [x] Azure Policy validation deferred until subscription selection
   - [x] Aspire post-provisioning checks (not an Aspire project)
-  - [ ] Bicep build and lint
-  - [ ] Provider script syntax and static checks
-  - [ ] Focused deployment-contract tests
-  - [ ] Full `pnpm validate`
-  - [ ] Container and workflow checks
+  - [x] Bicep build and lint
+  - [x] Provider script syntax and static checks
+  - [x] Focused deployment-contract tests
+  - [x] Full `pnpm validate`
+  - [x] Container and workflow checks
 
 Cloud-context validation is explicitly deferred because preparation must not select or persist a
 subscription, tenant, or location. The later operator must run `azd provision --preview` and
 review applicable Azure Policy before `azd provision`.
+
+## Validation proof
+
+| Check | Evidence | Result |
+|---|---|---|
+| Red contract | `pnpm exec vitest run tests/deployment/stage1-contract.test.ts` at `0a6a4ad` | Expected 5 failures for missing production artifacts |
+| Red CI | https://github.com/diberry/aca-3/actions/runs/37214331388/job/111471670390 | Expected `test` failure recorded |
+| azd | `azd version` | Installed (`1.32.0`) |
+| `azure.yaml` | Azure Developer CLI official schema validator | Pass |
+| Bicep | `az bicep build --file infra\main.bicep`; `az bicep lint --file infra\main.bicep` | Pass, no template diagnostics |
+| ARM template | Bicep build emitted valid `infra\main.json`; generated file removed/ignored | Pass |
+| Provider scripts | PowerShell parser and `bash -n` over all paired scripts | Pass |
+| Auth CLI contract | Help/schema lookup for Entra, Google, GitHub, and global auth commands | Pass |
+| Focused green | `pnpm exec vitest run tests/deployment/stage1-contract.test.ts` | 5 passed |
+| Full repository | `pnpm validate` | 8 files / 32 tests passed; build, workflows, pins, smoke passed |
+| Container/package | https://github.com/diberry/aca-3/actions/runs/37214946033/job/111473445250 | Pass; pinned Auth, Author, and Backend container builds completed |
+| PR policy | https://github.com/diberry/aca-3/actions/runs/37214946239 | Pass |
+
+The local Docker build reached the pinned container build but the workstation Docker engine
+rejected the npm registry TLS handshake. The same immutable Containerfiles passed in the clean
+GitHub Actions `validate` job above, providing the required container/package evidence without
+changing pins or weakening the build.
