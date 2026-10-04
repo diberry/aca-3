@@ -15,6 +15,13 @@ red-green-refactor cycle. Tests must exercise production code directly. If an as
 change during implementation, explain the correction and do not weaken the intended behavior.
 Follow `docs/architecture/wave-plan.md` for the complete workflow and evidence requirements.
 
+When changing a user-facing page, route, or visible UI state, add or update the corresponding
+Playwright browser test in `tests/e2e`. Keep screenshot baselines current for each covered
+page/state: review visual changes and intentionally regenerate baselines with
+`pnpm test:e2e:update-snapshots`; never update baselines automatically during validation.
+Run `pnpm test:e2e` and review screenshot diffs before submitting UI changes. Follow
+`tests/e2e/README.md` for viewing reports and the happy-path video.
+
 Every pull request description must maintain nonempty `## Goal`, `## Scope`,
 `## Implementation steps`, `## Risks and mitigations`, and `## Validation criteria`
 sections. Keep them current as the implementation changes. State included and excluded scope,

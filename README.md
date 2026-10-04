@@ -70,6 +70,8 @@ pnpm typecheck
 pnpm test
 pnpm build
 pnpm smoke
+pnpm test:e2e:install
+pnpm test:e2e
 pnpm validate:workflows
 pnpm validate
 ```
@@ -77,6 +79,9 @@ pnpm validate
 `pnpm validate` runs formatting, linting, type checking, unit and integration tests,
 production builds, workflow validation, and the real local-stack smoke test. It does not
 contain success-shaped fallbacks.
+
+Browser tests, screenshot baseline updates, visual diff review, video access, and PR
+verification are documented in the [Playwright browser test guide](tests/e2e/README.md).
 
 ## Workspace layout
 

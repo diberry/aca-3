@@ -22,6 +22,8 @@
     "test": "vitest run",
     "test:e2e": "playwright test --config tests/e2e/playwright.config.ts",
     "test:e2e:install": "playwright install chromium",
+    "test:e2e:update-snapshots": "playwright test --config tests/e2e/playwright.config.ts --update-snapshots",
+    "test:e2e:report": "playwright show-report",
     "typecheck": "tsc --noEmit --project tsconfig.json",
     "validate": "biome format . && biome lint . && tsc --noEmit --project tsconfig.json && vitest run && tsc --project tsconfig.build.json && vite build --config src/author/vite.config.ts && vite build --config src/auth/vite.config.ts && node scripts/validate-workflows.mjs && node scripts/smoke-local.mjs",
     "validate:workflows": "node scripts/validate-workflows.mjs"

@@ -6,7 +6,7 @@ export default defineConfig({
   testDir: ".",
   testMatch: "**/*.pw.ts",
   fullyParallel: false,
-  reporter: "list",
+  reporter: [["list"], ["html", { open: "never" }]],
   outputDir: "../../test-results/e2e",
   use: {
     baseURL: shellOrigin,

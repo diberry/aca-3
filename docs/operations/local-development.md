@@ -32,6 +32,7 @@ pnpm build
 pnpm smoke
 pnpm test:e2e:install
 pnpm test:e2e
+pnpm test:e2e:report
 pnpm validate
 ```
 
@@ -40,7 +41,8 @@ the shell origin, verifies forged identity headers are replaced, and confirms th
 survives Author and Backend shutdown.
 
 The Chromium browser suite starts and stops the same local stack automatically. See
-[`tests/e2e/README.md`](../../tests/e2e/README.md) for browser installation and troubleshooting.
+[`tests/e2e/README.md`](../../tests/e2e/README.md) for browser installation, screenshot
+baseline updates and comparison, video access, PR checks, and troubleshooting.
 
 ## Container builds
 
