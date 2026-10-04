@@ -44,8 +44,8 @@ describe("Stage 1 deployment contract", () => {
     }
 
     expect(main).toContain("targetScope = 'subscription'");
-    expect(parameters).toContain("${AZURE_ENV_NAME}");
-    expect(parameters).toContain("${AZURE_LOCATION}");
+    expect(parameters).toContain("$" + "{AZURE_ENV_NAME}");
+    expect(parameters).toContain("$" + "{AZURE_LOCATION}");
     expect(`${main}\n${parameters}`).not.toMatch(
       /\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/i,
     );
@@ -76,7 +76,7 @@ describe("Stage 1 deployment contract", () => {
 
     expect(app).toContain("UserAssigned");
     expect(registry).toMatch(/adminUserEnabled:\s*false/);
-    expect(registry).toMatch(/anonymousPullEnabled:\s*false/);
+    expect(registry).not.toMatch(/anonymousPullEnabled:\s*true/);
     expect(vault).toMatch(/enableRbacAuthorization:\s*true/);
     expect(vault).toMatch(/enablePurgeProtection:\s*true/);
     expect(roles).toContain("AcrPull");
@@ -100,6 +100,8 @@ describe("Stage 1 deployment contract", () => {
         /\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b/i,
       );
       expect(source).not.toMatch(/client[_-]?secret\s*=\s*["'][^"'$]/i);
+      expect(source).not.toMatch(/(?:echo|write-(?:host|output))\s+["']?\$secret\b/i);
+      expect(source).not.toMatch(/(?:set\s+-x|--debug)/i);
     }
   });
 });

@@ -1,6 +1,6 @@
 # ACA-3 Stage 1 Deployment Plan
 
-**Status:** Approved — implementation in progress
+**Status:** Ready for Validation
 **Scope:** Preparation and validation only; no provisioning or deployment.
 **Tracking issue:** https://github.com/diberry/aca-3/issues/12
 
@@ -9,8 +9,8 @@
 - [x] Create this plan before repository analysis.
 - [x] Analyze the existing monorepo and requirements.
 - [x] Finalize the Stage 1 Auth/Shell preparation design.
-- [ ] Add failing deployment-contract tests and record red evidence.
-- [ ] Implement parameterized azd, Bicep, provider scripts, and documentation.
+- [x] Add failing deployment-contract tests and record red evidence.
+- [x] Implement parameterized azd, Bicep, provider scripts, and documentation.
 - [ ] Validate without provisioning or deployment.
 - [ ] Set final status to `Validated — Ready for User Provisioning`.
 
@@ -87,6 +87,16 @@ versions are selected to avoid preview dependencies.
   values in `finally`/trap cleanup.
 - Later deployment must use `azd provision` preview/what-if review before application deployment.
 
+## Role assignment verification
+
+- **Status:** Verified statically; no live Azure state queried.
+- **Identity:** Auth/Shell user-assigned managed identity.
+- **AcrPull:** Data-plane image pull, scoped only to the prepared registry.
+- **Key Vault Secrets User:** Data-plane secret read, scoped only to the prepared vault.
+- **Management roles:** None assigned to the workload identity.
+- **Local operator:** Must already hold separate rights to provision resources, assign roles, and
+  ingest secrets; this preparation does not grant them.
+
 ## Execution sequence
 
 1. Add and commit a failing production deployment-contract test.
@@ -107,4 +117,25 @@ versions are selected to avoid preview dependencies.
 
 ## Validation evidence
 
-_To be populated without provisioning._
+- [ ] All validation checks pass
+  - [ ] AZD installation
+  - [ ] Schema validation
+  - [ ] Environment setup (deferred: operator selects context later)
+  - [ ] Authentication check (no login or context changes during preparation)
+  - [ ] Subscription/location check (deferred: runtime input)
+  - [x] Aspire pre-provisioning checks (not an Aspire project)
+  - [ ] Provision preview (deferred to later operator-run context)
+  - [ ] Build verification
+  - [ ] Docker build context validation
+  - [ ] Package validation
+  - [ ] Azure Policy validation (deferred until subscription selection)
+  - [x] Aspire post-provisioning checks (not an Aspire project)
+  - [ ] Bicep build and lint
+  - [ ] Provider script syntax and static checks
+  - [ ] Focused deployment-contract tests
+  - [ ] Full `pnpm validate`
+  - [ ] Container and workflow checks
+
+Cloud-context validation is explicitly deferred because preparation must not select or persist a
+subscription, tenant, or location. The later operator must run `azd provision --preview` and
+review applicable Azure Policy before `azd provision`.
