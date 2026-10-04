@@ -56,6 +56,18 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
       - name: Run Playwright tests
         run: pnpm test:e2e
+      - name: Prepare happy-path video artifact name
+        if: success()
+        id: artifact-name
+        run: echo "value=$(date -u +'%Y%m%dT%H%M%SZ')-playwright-happy-path-video" >> "$GITHUB_OUTPUT"
+      - name: Upload happy-path video
+        if: success()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ${{ steps.artifact-name.outputs.value }}
+          path: test-results/e2e/**/video.webm
+          if-no-files-found: error
+          retention-days: 7
       - name: Upload failure diagnostics
         if: failure()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
