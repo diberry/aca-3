@@ -24,5 +24,16 @@ Risks and mitigations, and Validation criteria sections. Keep these sections syn
 with the final diff and validation results. The `pr-description` check enforces the section
 names and requires meaningful content.
 
+## Browser UI changes
+
+When adding or changing a user-facing page, route, or visible UI state, add or update the
+corresponding Playwright test in `tests/e2e` and maintain its screenshot baseline. Review
+intentional visual changes and update baselines locally with `pnpm test:e2e:update-snapshots`;
+do not update snapshots automatically in CI. Run `pnpm test:e2e`, inspect any actual/diff
+images, and include the baseline updates with the UI change.
+
+See the [browser test guide](tests/e2e/README.md) for local commands, visual comparison,
+video access, and hosted PR verification.
+
 See [GitHub TDD enforcement](docs/operations/github-enforcement.md) for automated evidence
 checks and repository configuration.

@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- Node.js `24.21.0`
+- Node.js LTS (the exact repository pin is in `.node-version`)
 - Corepack and pnpm `12.7.0`
 
 ## Start the complete slice
@@ -30,12 +30,19 @@ pnpm typecheck
 pnpm test
 pnpm build
 pnpm smoke
+pnpm test:e2e:install
+pnpm test:e2e
+pnpm test:e2e:report
 pnpm validate
 ```
 
 The smoke test starts the real three-process stack, accesses Author and Backend only through
 the shell origin, verifies forged identity headers are replaced, and confirms the shell
 survives Author and Backend shutdown.
+
+The Chromium browser suite starts and stops the same local stack automatically. See
+[`tests/e2e/README.md`](../../tests/e2e/README.md) for browser installation, screenshot
+baseline updates and comparison, video access, PR checks, and troubleshooting.
 
 ## Container builds
 
