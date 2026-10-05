@@ -12,3 +12,4 @@ services:
     docker:
       path: src/auth/Containerfile
       context: .
+      remoteBuild: true
