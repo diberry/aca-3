@@ -1,0 +1,54 @@
+{
+  "schema": "squad-agent-provenance/v1",
+  "schema_version": 1,
+  "revision": 1,
+  "generated_at": "2026-10-04T14:06:00.000Z",
+  "agents": {
+    "stage-lead": {
+      "display_name": "stage-lead",
+      "persistent_name": "stage-lead",
+      "role": "Product and Architecture Lead",
+      "universe": "descriptive",
+      "status": "active",
+      "created_at": "2026-10-04T14:06:00.000Z",
+      "updated_at": "2026-10-04T14:06:00.000Z"
+    },
+    "boundary-engineer": {
+      "display_name": "boundary-engineer",
+      "persistent_name": "boundary-engineer",
+      "role": "Auth/Shell and Identity Specialist",
+      "universe": "descriptive",
+      "status": "active",
+      "created_at": "2026-10-04T14:06:00.000Z",
+      "updated_at": "2026-10-04T14:06:00.000Z"
+    },
+    "author-engineer": {
+      "display_name": "author-engineer",
+      "persistent_name": "author-engineer",
+      "role": "Runtime Microfrontend and UX Specialist",
+      "universe": "descriptive",
+      "status": "active",
+      "created_at": "2026-10-04T14:06:00.000Z",
+      "updated_at": "2026-10-04T14:06:00.000Z"
+    },
+    "platform-engineer": {
+      "display_name": "platform-engineer",
+      "persistent_name": "platform-engineer",
+      "role": "Backend, Azure, and Deployment Specialist",
+      "universe": "descriptive",
+      "status": "active",
+      "created_at": "2026-10-04T14:06:00.000Z",
+      "updated_at": "2026-10-04T14:06:00.000Z"
+    },
+    "quality-steward": {
+      "display_name": "quality-steward",
+      "persistent_name": "quality-steward",
+      "role": "TDD, Security Assurance, CI, and Documentation Specialist",
+      "universe": "descriptive",
+      "status": "active",
+      "created_at": "2026-10-04T14:06:00.000Z",
+      "updated_at": "2026-10-04T14:06:00.000Z"
+    }
+  },
+  "transaction_id": "5bbf97a8-84f5-4fdb-8cdf-180af70a0645"
+}

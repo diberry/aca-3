@@ -31,6 +31,15 @@ See the [wave delivery plan and test-driven workflow](docs/architecture/wave-pla
 [GitHub enforcement guide](docs/operations/github-enforcement.md) documents the required
 policy check and idempotent repository configuration scripts.
 
+## Squad
+
+The project-specific Squad roster and routing are defined in
+[`.squad/team.md`](.squad/team.md), [`.squad/routing.md`](.squad/routing.md), and
+[`.squad/governance.md`](.squad/governance.md). GitHub Copilot can use the `Squad` custom
+agent in `.github/agents/squad.agent.md`. For local Copilot CLI use, install the pinned
+Squad CLI with `npm install --global @bradygaster/squad-cli@1.0.0`, then run
+`copilot --agent squad` from the repository root.
+
 ## v1 stages
 
 v1 is limited to Stages 0 through 3:

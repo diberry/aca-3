@@ -1,0 +1,23 @@
+{
+  "universe_usage_history": [
+    {
+      "universe": "descriptive",
+      "used_at": "2026-10-04T14:06:00.000Z"
+    }
+  ],
+  "assignment_cast_snapshots": {
+    "2026-10-04-founding-aca-3-squad": {
+      "created_at": "2026-10-04T14:06:00.000Z",
+      "universe": "descriptive",
+      "agents": [
+        "stage-lead",
+        "boundary-engineer",
+        "author-engineer",
+        "platform-engineer",
+        "quality-steward"
+      ]
+    }
+  },
+  "transaction_id": "5bbf97a8-84f5-4fdb-8cdf-180af70a0645",
+  "registry_revision": 1
+}
