@@ -172,6 +172,7 @@ describe("Stage 1 deployment contract", () => {
       docker: {
         path: "src/auth/Containerfile",
         context: ".",
+        remoteBuild: true,
       },
     });
   });

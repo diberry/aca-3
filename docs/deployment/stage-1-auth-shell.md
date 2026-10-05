@@ -16,6 +16,7 @@ The exact local directory for every later `azd` command is:
 - One externally ingressed Azure Container App for Auth/Shell with insecure HTTP disabled.
 - One Container Apps environment with Log Analytics.
 - One access-controlled Azure Container Registry with admin and anonymous access disabled.
+- Auth/Shell container builds run remotely in that registry from the pinned Containerfile.
 - One user-assigned managed identity used for ACR pull and Key Vault secret references.
 - One RBAC-enabled Key Vault with purge protection and 90-day soft-delete retention.
 - Multiple Container Apps revision mode for overlap validation and traffic rollback.
@@ -32,7 +33,7 @@ Install and authenticate these tools before the later operator-run steps:
 - Azure CLI with the Container Apps extension
 - Azure Developer CLI
 - Bicep CLI through `az bicep`
-- Docker
+- Docker only for optional local container validation; `azd` uses the remote registry build
 - PowerShell 7 on Windows, or a POSIX-compatible shell
 - `gh` only for repository operations; it cannot create or rotate GitHub OAuth App secrets
 

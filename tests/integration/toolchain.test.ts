@@ -35,4 +35,8 @@ describe("exact toolchain pins", () => {
       `https://biomejs.dev/schemas/${manifest.devDependencies["@biomejs/biome"]}/schema.json`,
     );
   });
+
+  it("excludes ignored azd environment state from repository validation", () => {
+    expect(biome.files.includes).toContain("!.azure");
+  });
 });
