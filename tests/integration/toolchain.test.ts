@@ -15,6 +15,11 @@ const lockfile = dependencyDocument.toJS();
 const readme = readRepositoryFile("README.md");
 const adr = readRepositoryFile("docs/adr/0004-pinned-monorepo-toolchain.md");
 const biome = JSON.parse(readRepositoryFile("biome.json"));
+const containerfiles = [
+  "src/auth/Containerfile",
+  "src/author/Containerfile",
+  "src/backend/Containerfile",
+];
 
 describe("exact toolchain pins", () => {
   it.each([
@@ -34,5 +39,22 @@ describe("exact toolchain pins", () => {
     expect(biome.$schema).toBe(
       `https://biomejs.dev/schemas/${manifest.devDependencies["@biomejs/biome"]}/schema.json`,
     );
+  });
+
+  it("bootstraps pinned pnpm through the build registry", () => {
+    for (const file of containerfiles) {
+      const containerfile = readRepositoryFile(file);
+
+      expect(containerfile).toContain(
+        "ARG NPM_REGISTRY=https://packagefeedproxy.microsoft.io/npm/",
+      );
+      expect(containerfile).toContain(
+        `RUN npm install --global pnpm@${manifest.engines.pnpm} --registry=$NPM_REGISTRY`,
+      );
+      expect(containerfile).toContain(
+        "RUN pnpm install --frozen-lockfile --registry=$NPM_REGISTRY",
+      );
+      expect(containerfile).not.toContain("corepack prepare");
+    }
   });
 });
